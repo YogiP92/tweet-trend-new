@@ -6,7 +6,7 @@ pipeline {
     }
 
 environment {
-    PATH+EXTRA = '/opt/apache-maven-3.9.6/bin:$PATH'
+    PATH_PLUS_EXTRA = '/opt/apache-maven-3.9.6/bin:$PATH'
 }
     stages {
         stage('build') {
