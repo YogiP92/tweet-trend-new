@@ -3,13 +3,16 @@ provider "aws" {
 }
 
 resource "aws_instance" "demo_server" {
-    ami = "ami-08fe36427228eddc4"
+    ami = "ami-03f4878755434977f"
     instance_type = "t2.micro"
     key_name = "dpp"
     //security_groups = [ "demo-sg" ]
     vpc_security_group_ids = [aws_security_group.demo-sg.id]
     subnet_id = aws_subnet.dpp-public-subnet-01.id 
-  
+for_each = toset(["jenkins-master", "build-slave", "ansible"])
+   tags = {
+     Name = "${each.key}"
+   }  
 }
 
 resource "aws_security_group" "demo-sg" {
@@ -25,7 +28,13 @@ resource "aws_security_group" "demo-sg" {
     cidr_blocks      = ["0.0.0.0/0"]
     #ipv6_cidr_blocks = [aws_vpc.main.ipv6_cidr_block]
   }
-
+    ingress {
+    description      = "Jenkins port"
+    from_port        = 8080
+    to_port          = 8080
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+    }
   egress {
     from_port        = 0
     to_port          = 0

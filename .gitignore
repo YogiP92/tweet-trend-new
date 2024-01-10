@@ -3,4 +3,6 @@
 **/*.tfstate.*
 **/.terraform/*
 **/..terraform.lock.hcl
+**/.terraform.lock.hcl
 **/.pem
+.DS_Store
