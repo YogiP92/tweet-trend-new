@@ -4,3 +4,5 @@
 **/.terraform/*
 **/..terraform.lock.hcl
 **/.pem
+.DS_Store
+**/.terraform.lock.hcl
