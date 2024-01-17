@@ -112,34 +112,37 @@ pipeline {
         // }
 
         stage("Jar Publish") {
-            steps {
-                script {
-                    echo '<--------------- Jar Publish Started --------------->'
-                    def server = Artifactory.newServer url: registry + "/artifactory", credentialsId: "artifactory-cred"
-                    def properties = "buildid=${env.BUILD_ID},commitid=${GIT_COMMIT}";
-                    def uploadSpec = """{
-                          "files": [
-                            {
-                              "pattern": "jarstaging/(*)",
-                              "target": "libs-release-local/{1}",
-                              "flat": "false",
-                              "props": "${properties}",
-                              "exclusions": [ "*.sha1", "*.md5"]
-                            }
-                         ]
-                     }"""
-                    try {
-                        def buildInfo = server.upload(uploadSpec)
-                        buildInfo.env.collect()
-                        server.publishBuildInfo(buildInfo)
-                        echo '<--------------- Jar Publish Ended --------------->'
-                    } catch (Exception e) {
-                        echo "Error uploading artifacts to Artifactory: ${e.message}"
-                        error "Failed to publish artifacts to Artifactory"
-                        // Add more logging if needed
+    steps {
+        script {
+            echo '<--------------- Jar Publish Started --------------->'
+            def server = Artifactory.newServer url: registry + "/artifactory", credentialsId: "artifactory-cred"
+            def properties = "buildid=${env.BUILD_ID},commitid=${GIT_COMMIT}"
+            def uploadSpec = """{
+                  "files": [
+                    {
+                      "pattern": "jarstaging/(*)",
+                      "target": "libs-release-local/{1}",
+                      "flat": "false",
+                      "props": "${properties}",
+                      "exclusions": [ "*.sha1", "*.md5"]
                     }
-                }
+                 ]
+             }"""
+            try {
+                def buildInfo = server.upload(uploadSpec)
+                buildInfo.env.collect()
+                server.publishBuildInfo(buildInfo)
+                echo '<--------------- Jar Publish Ended --------------->'
+            } catch (Exception e) {
+                echo "Error uploading artifacts to Artifactory: ${e.message}"
+                error "Failed to publish artifacts to Artifactory"
+                currentBuild.result = 'FAILURE' // Mark the build as failed
+                // Add more logging if needed
+                throw e // Rethrow the exception to get more details in the Jenkins logs
             }
         }
+    }
+}
+
     }
 }
