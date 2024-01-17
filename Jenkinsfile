@@ -17,10 +17,14 @@ pipeline {
             }
         }
         stage("test"){
-            echo "------------- Unit test started -------------"
-            sh 'mvn surefire-report:report'
-            echo "------------- Unit test completed -------------"
+            steps {
+                echo "------------- Unit test started -------------"
+                sh 'mvn surefire-report:report'
+                echo "------------- Unit test completed -------------"
+            } 
         }
+
+
 
     stage('SonarQube analysis') {
     environment {
