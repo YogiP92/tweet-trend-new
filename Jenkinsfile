@@ -51,7 +51,8 @@
 //    }
 //    }
 //
-//def registry = 'https://yogip92.jfrog.io/'
+//
+def registry = 'https://yogip92.jfrog.io/'
 
 pipeline {
     agent {
