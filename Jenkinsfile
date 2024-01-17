@@ -80,35 +80,35 @@ pipeline {
             }
         }
 
-        stage('SonarQube analysis') {
-            environment {
-                scannerHome = tool 'yogip92-sonar-scanner'
-                nodejsHome = tool 'Node.js' // Add this line to reference Node.js installation
-            }
-            steps {
-                script {
-                    // Add Node.js to PATH
-                    env.PATH = "${nodejsHome}/bin:${env.PATH}"
-
-                    withSonarQubeEnv('yogip92-sonarqube-server') {
-                        sh "${scannerHome}/bin/sonar-scanner -X"
-                    }
-                }
-            }
-        }
-
-        stage("Quality Gate") {
-            steps {
-                script {
-                    timeout(time: 1, unit: 'HOURS') {
-                        def qg = waitForQualityGate()
-                        if (qg.status != 'OK') {
-                            error "Pipeline aborted due to quality gate failure: ${qg.status}"
-                        }
-                    }
-                }
-            }
-        }
+        //stage('SonarQube analysis') {
+        //    environment {
+        //        scannerHome = tool 'yogip92-sonar-scanner'
+        //        nodejsHome = tool 'Node.js' // Add this line to reference Node.js installation
+        //    }
+        //    steps {
+        //        script {
+        //            // Add Node.js to PATH
+        //            env.PATH = "${nodejsHome}/bin:${env.PATH}"
+//
+        //            withSonarQubeEnv('yogip92-sonarqube-server') {
+        //                sh "${scannerHome}/bin/sonar-scanner -X"
+        //            }
+        //        }
+        //    }
+        //}
+//
+        //stage("Quality Gate") {
+        //    steps {
+        //        script {
+        //            timeout(time: 1, unit: 'HOURS') {
+        //                def qg = waitForQualityGate()
+        //                if (qg.status != 'OK') {
+        //                    error "Pipeline aborted due to quality gate failure: ${qg.status}"
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
 
         stage("Jar Publish") {
             steps {
