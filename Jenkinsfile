@@ -54,7 +54,7 @@
 //
 def registry = 'https://yogip92.jfrog.io/'
 def imageName = 'yogip92.jfrog.io/yogi-docker-local/ttrend'
-def version   = '2.1.2'
+def version   = '2.1.3'
 
 pipeline {
     agent {
